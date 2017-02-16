@@ -76,6 +76,14 @@ class ShellCmd(cmd.Cmd, object):
         # initialize return code
         self.retcode = 0
 
+    def _is_allowed_line(self):
+        for s_reg in self.conf['allowed_line_regexp']:
+            self.log.error(s_reg)
+            if re.search(s_reg, self.g_line):
+                return True
+
+        return False
+
     def __getattr__(self, attr):
         """ This method actually takes care of all the called method that are
         not resolved (i.e not existing methods). It actually will simulate
@@ -132,7 +140,7 @@ class ShellCmd(cmd.Cmd, object):
                 utils.exec_cmd('echo "WinSCP: this is end-of-file: %s"'
                                % self.retcode)
             return object.__getattribute__(self, attr)
-        if self.g_cmd in self.conf['allowed']:
+        if self.g_cmd in self.conf['allowed'] and self._is_allowed_line():
             if self.conf['timer'] > 0:
                 self.mytimer(0)
             self.g_arg = re.sub('^~$|^~/', '%s/' % self.conf['home_path'],

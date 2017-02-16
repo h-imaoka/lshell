@@ -325,6 +325,7 @@ class CheckConfig:
                 if len(split) > 1 and key in ['path',
                                               'overssh',
                                               'allowed',
+                                              'allowed_line_regexp',
                                               'allowed_shell_escape',
                                               'forbidden']:
                     for stuff in split:
@@ -453,6 +454,7 @@ class CheckConfig:
                 pass
 
         for item in ['allowed',
+                     'allowed_line_regexp',
                      'allowed_shell_escape',
                      'forbidden',
                      'sudo_commands',
@@ -481,6 +483,7 @@ class CheckConfig:
                     self.conf[item] = self.myeval(self.conf_raw[item], item)
             except KeyError:
                 if item in ['allowed',
+                            'allowed_line_regexp',
                             'allowed_shell_escape',
                             'overssh',
                             'sudo_commands']:
